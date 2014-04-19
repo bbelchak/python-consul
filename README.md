@@ -80,9 +80,6 @@ Out[5]: [<consul.kv.Key at 0x105997790>, <consul.kv.Key at 0x105997a50>]
 Contributing
 ============
 
-* Source hosted at [GitHub][repo]
-* Report issues/questions/feature requests on [GitHub Issues][issues]
-
 Pull requests are very welcome! Make sure your patches are well tested.
 Ideally create a topic branch for every separate change you make. For
 example:
