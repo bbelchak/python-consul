@@ -1,6 +1,7 @@
 import unittest
 from mock import patch
 from consul.kv import Key, KV
+from consul.agent import Agent
 
 TEST_KEY_DATA = {
     'CreateIndex': 100,
@@ -65,4 +66,24 @@ if LIVE_TESTS_ENABLED:
             self.assertEqual(len(rv), 2)
             self.assertEqual(rv[0].value, Key(TEST_KEY_DATA, self.kv).value)
 
+        def tearDown(self):
+            self.kv.delete('zip')
 
+    class AgentLiveTestCase(unittest.TestCase):
+        def setUp(self):
+            self.agent = Agent(LIVE_ADDRESS)
+
+        def test_register_check(self):
+            check_data = {
+                "ID": "mem",
+                "Name": "Memory utilization",
+                "Notes": "Ensure we don't oversubscribe memory",
+                "Script": "/bin/uname -a",
+                "Interval": 3600
+            }
+            self.agent.register_check(check_data)
+            checks = self.agent.checks()
+            self.assertNotEqual({}, checks)
+            data = self.agent.deregister_check('mem')
+            checks = self.agent.checks()
+            self.assertEqual({}, checks)

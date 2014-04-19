@@ -1,5 +1,6 @@
 from base64 import b64decode
 import requests
+from consul.base import BaseAPI
 
 
 class Key(object):
@@ -16,12 +17,8 @@ class Key(object):
         return b64decode(self._value)
 
 
-class KV(object):
-    def __init__(self, host='localhost', port=8500, version='v1'):
-        self._host = host
-        self._port = port
-        self._url = 'http://{0}:{1}/{2}/kv'.format(
-            self._host, self._port, version)
+class KV(BaseAPI):
+    endpoint = 'kv'
 
     def _make_url(self, key):
         return '{0}/{1}'.format(self._url, key)
@@ -31,7 +28,6 @@ class KV(object):
 
     def get(self, key, **params):
         rv = requests.get(self._make_url(key), params=params)
-        print rv.status_code
         if rv.status_code == 200:
             rv = rv.json()
             if len(rv) > 1:
