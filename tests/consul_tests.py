@@ -42,7 +42,7 @@ class KVTestCase(unittest.TestCase):
 if LIVE_TESTS_ENABLED:
     class KVLiveTestCase(unittest.TestCase):
         def setUp(self):
-            self.kv = KV('192.168.2.201')
+            self.kv = KV(LIVE_ADDRESS)
             self.kv.put('zip', 'test')
             self.kv.put('zip/what', 'test')
 
